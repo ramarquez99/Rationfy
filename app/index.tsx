@@ -3,24 +3,34 @@ import { View } from 'react-native';
 import 'react-native-url-polyfill/auto';
 import { supabase } from '../lib/supabase';
 import { Session } from '@supabase/supabase-js';
-import { Stack, Redirect } from "expo-router";
+import { Stack, Redirect, router } from "expo-router";
 
 export default function HomeScreen() {
   const [ session, setSession ] = useState<Session | null>(null);
 
   useEffect(() => {
+    console.log("SESSION EFFECT")
     supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session)
+      if(session) {
+        router.replace("/(app)/home");
+      } else {
+        console.log("Invalid user")
+      };
     });
 
     supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
+      console.log("LISTENER")
+      if(session) {
+        router.replace("/(app)/home");
+      } else {
+        router.replace("/(auth)/login");
+      }
     });
   }, [])
 
-  if(!session) {
-    return <Redirect href={"/(auth)/login"}/>
-  }
+  // if(!(session && session?.user)) {
+  //   return <Redirect href={"/(auth)/login"}/>
+  // }
 
-  return(<Redirect href={"/(app)/home"}/>)
+  // return(<Redirect href={"/(app)/home"}/>)
 }

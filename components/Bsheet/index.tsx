@@ -1,23 +1,23 @@
 import React, { useCallback, useMemo, useRef } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { router } from 'expo-router';
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 
-
-export default function HomeScreen() {
-
+const Bsheet = () => {
+  // ref
   const bottomSheetRef = useRef<BottomSheet>(null);
 
+  // callbacks
   const handleSheetChanges = useCallback((index: number) => {
     console.log('handleSheetChanges', index);
   }, []);
 
+  // renders
   return (
     <View style={styles.container}>
       <BottomSheet
         ref={bottomSheetRef}
         onChange={handleSheetChanges}
-        index={2}
+        index={1}
         snapPoints={[200, 500]}
       >
         <BottomSheetView style={styles.contentContainer}>
@@ -26,7 +26,7 @@ export default function HomeScreen() {
       </BottomSheet>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -39,3 +39,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
+
+export default Bsheet;
