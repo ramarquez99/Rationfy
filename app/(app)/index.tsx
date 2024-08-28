@@ -1,29 +1,16 @@
-import React, { useCallback, useMemo, useRef } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { router } from 'expo-router';
-import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 
+import HomeScreen from './home';
+import Bsheet from '@/components/Bsheet';
 
-export default function HomeScreen() {
-
-  const bottomSheetRef = useRef<BottomSheet>(null);
-
-  const handleSheetChanges = useCallback((index: number) => {
-    console.log('handleSheetChanges', index);
-  }, []);
+export default function App() {
 
   return (
     <View style={styles.container}>
-      <BottomSheet
-        ref={bottomSheetRef}
-        onChange={handleSheetChanges}
-        index={2}
-        snapPoints={[200, 500]}
-      >
-        <BottomSheetView style={styles.contentContainer}>
-          <Text>Awesome 🎉</Text>
-        </BottomSheetView>
-      </BottomSheet>
+      <HomeScreen />
+      <Bsheet/>
     </View>
   );
 }
@@ -31,8 +18,7 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 24,
-    backgroundColor: 'grey',
+    backgroundColor: 'white',
   },
   contentContainer: {
     flex: 1,

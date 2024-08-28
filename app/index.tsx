@@ -12,7 +12,7 @@ export default function HomeScreen() {
     console.log("SESSION EFFECT")
     supabase.auth.getSession().then(({ data: { session } }) => {
       if(session) {
-        router.replace("/(app)/home");
+        router.replace("/(app)");
       } else {
         console.log("Invalid user")
       };
@@ -21,7 +21,7 @@ export default function HomeScreen() {
     supabase.auth.onAuthStateChange((_event, session) => {
       console.log("LISTENER")
       if(session) {
-        router.replace("/(app)/home");
+        router.replace("/(app)");
       } else {
         router.replace("/(auth)/login");
       }
