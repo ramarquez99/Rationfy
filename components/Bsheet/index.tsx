@@ -4,6 +4,7 @@ import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 import { useNavigation } from 'expo-router';
 import { Icon } from '@rneui/base';
 import { WinDiag } from '@/constants/Windiag';
+import Body from './Body';
 
 const winDiag = WinDiag();
 
@@ -47,14 +48,6 @@ const Bsheet = () => {
     })
   }, [])
 
-  // const handleSheetChange = useCallback((index:any) => {
-  //   console.log("handleSheetChange", index);
-  // }, []);
-
-  // const handleSnapPress = useCallback((index:any) => {
-  //   sheetRef.current?.snapToIndex(index);
-  // }, []);
-
   const handleClosePress = useCallback(() => {
     sheetRef.current?.close();
     setShow(false);
@@ -65,7 +58,6 @@ const Bsheet = () => {
     setShow(true);
   }, []);
 
-  console.log(sheetRef)
   return (
     <>
       {show &&
@@ -88,7 +80,7 @@ const Bsheet = () => {
         // backgroundComponent={null} 
       >
         <BottomSheetView style={styles.contentContainer}>
-          <Text>Awesome 🎉</Text>
+          <Body/>
         </BottomSheetView>
       </BottomSheet>
     </>

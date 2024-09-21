@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { View } from 'react-native';
 import 'react-native-url-polyfill/auto';
-import { supabase } from '../lib/supabase';
+import { supabase } from '@/services/supabase/supabaseClient';
 import { Session } from '@supabase/supabase-js';
 import { Stack, Redirect, router } from "expo-router";
 
@@ -12,7 +12,8 @@ export default function HomeScreen() {
     console.log("SESSION EFFECT")
     supabase.auth.getSession().then(({ data: { session } }) => {
       if(session) {
-        router.replace("/(app)");
+        router.replace("/Admin/accounts" as any);
+        // router.replace("/(app)");
       } else {
         console.log("Invalid user")
       };
@@ -21,7 +22,8 @@ export default function HomeScreen() {
     supabase.auth.onAuthStateChange((_event, session) => {
       console.log("LISTENER")
       if(session) {
-        router.replace("/(app)");
+        router.replace("/Admin/accounts" as any);
+        // router.replace("/(app)");
       } else {
         router.replace("/(auth)/login");
       }

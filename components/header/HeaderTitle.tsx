@@ -7,6 +7,7 @@ interface HeaderTitleProps {
   navigation: any;
   title?: string;
   c?: boolean;
+  bold?: boolean;
 };
 
 // export const HeaderTitle = ({navigation, title}: HeaderTitleProps) => {
@@ -15,13 +16,13 @@ interface HeaderTitleProps {
 //   })
 // }
 
-const HeaderTitle = ({ navigation, title, c=false}: HeaderTitleProps) => {
+const HeaderTitle = ({ navigation, title, c=false, bold=true}: HeaderTitleProps) => {
   useEffect(() => {
     navigation.setOptions({
       headerTitleAlign: c ? 'center' : 'left',
       title: title || "title",
       headerTitleStyle: { 
-        fontWeight: 'bold',
+        fontWeight: bold ? 'bold' : '400',
       },
       headerStyle: { 
         backgroundColor: '#fff',

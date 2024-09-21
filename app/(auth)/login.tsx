@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, ActivityIndicator, Alert } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
-import { supabase } from '../../lib/supabase';
+import { supabase } from '../../services/supabase/supabaseClient';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');

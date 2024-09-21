@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import { Icon } from '@rneui/base';
 import HeaderTitle from '@/components/header/HeaderTitle';
 import { useNavigation } from 'expo-router';
-
+import { WinDiag } from '@/constants/Windiag';
+import API from '../../../services/supabase/supabaseApi';
+import EmptyList from '@/components/design/EmptyList';
 
 const data = [
   { id: '1', account: 'Santander Debito', amount: '$10,105.00', type: 'Crédito' },
@@ -23,9 +25,22 @@ const data = [
   { id: '15', account: 'Santander Debito', amount: '$10,105.00', type: 'Ahorros' },
 ];
 
-const HomeScreen = () => {
+const winDiag = WinDiag();
 
+const HomeScreen = () => {
   const navigation = useNavigation();
+
+  const [ accounts, setAccounts ] = useState<any[]>([]);
+
+  useEffect(() => {
+    getAccounts();
+  }, [])
+
+  const getAccounts = async() => {
+    const accounts = await API.instance.getAccounts();
+    console.log("ACCOUNTS: ", accounts)
+    setAccounts(accounts || []);
+  };
 
   const renderItem = ({ item }:any) => (
     <View style={styles.itemContainer}>
@@ -36,7 +51,7 @@ const HomeScreen = () => {
         </View>
       </View>
       <Text style={styles.amountText}>{item.amount}</Text>
-      <Icon name="chevron-right" type="material-community" />
+      <Icon name="chevron-right" type="material-community" color="#B3B3B3" />
     </View>
   );
 
@@ -48,20 +63,25 @@ const HomeScreen = () => {
           <Text style={styles.balanceTitle}>Balance total</Text>
           <View style={styles.balanceAmountContainer}>
             <Text style={styles.balanceAmount}>$ 24,561</Text>
-            <Icon name="chevron-right" type="material-community" />
           </View>
         </View>
-
-        <FlatList
-          data={data}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.id}
-          ItemSeparatorComponent={() => <View style={styles.separator} />}
-        />
-
+        <View style={styles.separator} />
+          <FlatList
+            data={accounts}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.id}
+            ItemSeparatorComponent={() => <View style={styles.separator} />}
+            ListFooterComponent={
+              (accounts?.length > 0)
+              ? <View style={styles.flatListFooter}/>
+              : <></>
+            }
+            ListEmptyComponent={<EmptyList/>}
+          />
         <TouchableOpacity style={styles.floatingButton}>
-          <Icon name="plus" type="material-community" color="#fff" />
+          <Icon name="plus" type="material-community" color="#00728B" size={winDiag*4} />
         </TouchableOpacity>
+
       </View>
     </>
   );
@@ -94,10 +114,14 @@ const styles = StyleSheet.create({
   balanceAmountContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: "center",
   },
   balanceAmount: {
-    fontSize: 32,
+    fontSize: 40,
     fontWeight: 'bold',
+  },
+  balanceIcon :{
+    alignSelf: "flex-end"
   },
   itemContainer: {
     flexDirection: 'row',
@@ -108,38 +132,42 @@ const styles = StyleSheet.create({
   },
   itemTextContainer: {
     flexDirection: 'column',
+    height: "100%"
   },
   accountText: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
   },
   typeBadge: {
     backgroundColor: '#000',
-    borderRadius: 4,
+    borderRadius: winDiag*1,
     paddingHorizontal: 6,
     paddingVertical: 2,
-    marginTop: 4,
+    marginTop: winDiag*1.5,
+    width: winDiag*9,
+    alignItems: "center",
   },
   typeText: {
     color: '#fff',
-    fontSize: 12,
+    fontSize: 11,
   },
   amountText: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
   },
   separator: {
-    height: 1,
-    backgroundColor: '#eee',
-    marginVertical: 8,
+    height: winDiag*0.2,
+    backgroundColor: '#DDD9D9',
+    marginTop: winDiag*0.1,
+    marginBottom: winDiag*3,
   },
   floatingButton: {
     position: 'absolute',
     bottom: 20,
-    right: 20,
-    backgroundColor: '#6200ee',
-    borderRadius: 25,
-    width: 50,
+    right: winDiag*11.3,
+    backgroundColor: '#ECE6F0',
+    borderRadius: 20,
+    width: winDiag*22,
     height: 50,
     justifyContent: 'center',
     alignItems: 'center',
@@ -149,52 +177,11 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
     elevation: 5,
   },
+  flatListFooter: {
+    height: winDiag*0.2, backgroundColor: '#DDD9D9',
+    marginTop: winDiag*0.1,
+    marginBottom: winDiag*8,
+  }
 });
 
 export default HomeScreen;
-
-
-// import { useEffect } from 'react';
-// import { useNavigation } from 'expo-router';
-// import { View, Text, StyleSheet, Button } from 'react-native';
-// import { router } from 'expo-router';
-// import { supabase } from '@/lib/supabase';
-// import Bsheet from '@/components/Bsheet';
-// import HeaderTitle from '@/components/header/HeaderTitle';
-
-// export default function HomeScreen() {
-
-//   const navigation = useNavigation();
-
-//   useEffect(() => {
-    
-//   }, [navigation]);
-
-//   const handleLogout = async () => {
-//     console.log("click")
-//     const { error } = await supabase.auth.signOut();
-//     if (error) {
-//     } else {
-//       router.replace('/(auth)/login'); // Redirige al usuario a la pantalla de login
-//     }
-//   };
-
-//   return (
-//     <View style={styles.container}>
-//       <HeaderTitle navigation={navigation} title="Hola Raul!" c={true}/>
-//       <Text>123456</Text>
-//       <Button title="Logout" 
-//         // onPress={handleLogout} 
-//       />
-//     </View>
-//   );
-// }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//     backgroundColor: "white"
-//   },
-// });
